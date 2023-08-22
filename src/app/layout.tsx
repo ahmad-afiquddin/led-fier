@@ -41,7 +41,7 @@ export default function RootLayout({
 				<Toaster />
 				<footer className="mt-10 border-t border-gray-600">
 					<div className="container py-4 text-gray-400 tracking-tighter font-semibold">
-						<span>Made with &#10084;&#65039; by <Link href="https://linktr.ee/ahmadafiquddin" target="_blank">Ahmad Afiquddin Ahmad</Link> &#169; 2023</span>
+						<span>Made with &#10084;&#65039; by <Link className="italic underline" href="https://linktr.ee/ahmadafiquddin" target="_blank">Ahmad Afiquddin Ahmad</Link> &#169; 2023</span>
 					</div>
 				</footer>
 			</body>

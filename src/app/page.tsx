@@ -64,13 +64,13 @@ export default function Home() {
 				{file?
 					<>
 						<div className="mt-5 p-2 flex justify-between items-center text-white border rounded-md">
-							<span className="flex items-center space-x-2">
+							<div className="flex items-center space-x-2">
 								<FileImageIcon size={15} /> 
 								<span>
 									{file.name}
 								</span>
-								<small className="text-sm text-gray-500">{width} x {height} pixels</small>
-							</span>
+								<small className="text-sm text-gray-500">{width} x {height}</small>
+							</div>
 							<button className="" onClick={() => {
 								setFile(null);
 								setProcessedImage("");
@@ -84,11 +84,13 @@ export default function Home() {
 									By default, your image will be resized to fit within 80 by 80 
 									pixels before the led/fier is applied.
 								</p>
-								<div className="mt-3 flex space-x-2 items-baseline">
-									<Button className="mt-5" type="button" disabled={isLoading} onClick={onSubmit}>
-										{isLoading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:""}
-										Process image
-									</Button>
+								<div className="mt-3 grid lg:flex gap-2 items-baseline">
+									<div>
+										<Button className="mt-5" type="button" disabled={isLoading} onClick={onSubmit}>
+											{isLoading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:""}
+											Process image
+										</Button>
+									</div>
 									{processedImage && 
 										<>
 											<a className="text-sm underline" href="#results">Go to results</a>
