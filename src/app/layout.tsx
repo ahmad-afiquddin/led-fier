@@ -38,7 +38,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={`${inter.className} bg-black`}>
 				<nav className="py-4 px-1 md:px-4 sticky top-0 z-10 bg-black bg-opacity-50 border-b border-gray-600 backdrop-blur-lg">
-					<div className="container px-4 md:px-8 !mx-0 !md:mx-auto flex space-x-8 items-baseline">
+					<div className="container px-4 md:px-8 flex space-x-8 items-baseline">
 						<h1 className="text-white flex space-x-2 items-baseline tracking-tighter">
 							<span className="text-2xl">&#128250;</span>
 							<span className="text-lg font-semibold">led/fier</span>
