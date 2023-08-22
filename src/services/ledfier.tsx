@@ -1,7 +1,6 @@
 "use client";
 
 import axiosHelper from "./base";
-import { ArbDimNumArray } from "@d4c/numjs/build/main/lib/ndarray";
 
 async function ledfier(file: File): Promise<any> {
 	try {
