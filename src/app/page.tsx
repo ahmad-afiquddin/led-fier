@@ -48,7 +48,7 @@ export default function Home() {
 				</p>
 				<div className="mt-5 flex space-x-2">
 					<a href="#form"><Button variant="secondary">Get Started</Button></a>
-					<Link href="https://github.com/ahmad-afiquddin" target="_blank">
+					<Link href="https://github.com/ahmad-afiquddin/led-fier" target="_blank">
 						<Button className="flex items-center space-x-2" variant="default">
 							<GithubIcon size={15} />
 							<span>GitHub</span>
@@ -89,7 +89,14 @@ export default function Home() {
 										{isLoading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:""}
 										Process image
 									</Button>
-									{processedImage && <a className="text-sm underline" href="#results">Go to results</a>}
+									{processedImage && 
+										<>
+											<a className="text-sm underline" href="#results">Go to results</a>
+											<a className="text-sm underline" href={processedImage} download={file? file.name:"processed.jpeg"}>
+												Save image
+											</a>
+										</>
+									}
 								</div>
 							</AlertDescription>
 						</Alert>
