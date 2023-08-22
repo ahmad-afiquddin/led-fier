@@ -11,6 +11,22 @@ export const metadata: Metadata = {
 	icons: "./favicon.ico",
 	title: "led/fier",
 	description: "led/fy your images like the olden days of led TVs",
+	viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+	openGraph: {
+		title: "led/fier",
+		type: "website",
+		images: "/television.png",
+		description: "led/fy your images like the olden days of led TVs",
+	},
+	twitter: {
+		title: "led/fier",
+		images: ["/television.png"],
+		description: "led/fy your images like the olden days of led TVs",
+		site: "https://led.afiquddin.com",
+		card: "summary",
+		creator: "@ahmadafiquddin",
+	},
+	robots: "all",
 };
 
 export default function RootLayout({
