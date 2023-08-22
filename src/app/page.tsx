@@ -4,24 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription, } from "@/components/ui/alert";
 import { Dropzone } from "@/components/dropzone/dropzone";
 import { GithubIcon, FileImageIcon, X, AlertTriangle, Loader2 } from "lucide-react";
-import { ledfier, localLedfier } from "@/services/ledfier";
+import { ledfier } from "@/services/ledfier";
 
 export default function Home() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -30,67 +17,22 @@ export default function Home() {
 	const [file, setFile] = useState<File | null>();
 	const [processedImage, setProcessedImage] = useState("");
 	const { toast } = useToast();
-	const formSchema = z.object({
-		width: z.number().min(80, {
-			message: "Minimum base width is 80 pixels",
-		}).max(400, {
-			message: "Maximum base width is 400 pixels, your device might still fail to run the led/fier",
-		}),
-		height: z.number().min(80, {
-			message: "Minimum base height is 80 pixels",
-		}).max(400, {
-			message: "Maximum base height is 400 pixels, your device might still fail to run the led/fier",
-		}),
-	});
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-		  width: 80,
-		  height: 80,
-		},
-	});
 	
-	async function onSubmit(values: z.infer<typeof formSchema>) {
+	async function onSubmit() {
 		setProcessedImage("");
 		setIsLoading(true);
-		if ([values.width, values.height].every((dimension) => dimension === 80)) {
-			try {
-				const response = file && await ledfier(file) || "";
-				setProcessedImage(response);
-			} catch(err) {
-				toast({
-					title: "Something went wrong",
-					description: "An error occured, please try again",
-					variant: "destructive",
-				});
-			} finally {
-				setIsLoading(false);
-			}
-		} else {
-			try {
-				const reader = new FileReader();
-				reader.onload = async function (event) {
-					if(event?.target?.result) {
-						const response = await localLedfier(event.target.result as unknown as Buffer);
-						setProcessedImage(response);
-					} else {
-						toast({
-							title: "Something went wrong",
-							description: "An error occured, please try again",
-							variant: "destructive",
-						});
-					}
-				}; 
-				file && reader.readAsArrayBuffer(file);
-			} catch(err) {
-				toast({
-					title: "Something went wrong",
-					description: "An error occured, please try again. (Your device might not have enough memory for your set of base dimensions)",
-					variant: "destructive",
-				});
-			} finally {
-				setIsLoading(false);
-			}
+
+		try {
+			const response = file && await ledfier(file) || "";
+			setProcessedImage(response);
+		} catch(err) {
+			toast({
+				title: "Something went wrong",
+				description: "An error occured, please try again",
+				variant: "destructive",
+			});
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -134,7 +76,7 @@ export default function Home() {
 								setProcessedImage("");
 							}}><X /></button>
 						</div> 
-						<Alert className="mt-5">
+						<Alert className="mt-5 relative">
 							<AlertTriangle className="w-4 h-4"/>
 							<AlertTitle>Disclaimer</AlertTitle>
 							<AlertDescription>
@@ -142,57 +84,15 @@ export default function Home() {
 									By default, your image will be resized to fit within 80 by 80 
 									pixels before the led/fier is applied.
 								</p>
-								<p>
-									Selecting different base dimensions will result in better looking results,
-									but instead of the algorithm running on a server,
-									it will be run on your device instead
-									{" (and there's still a possibility that it won't run)."}
-								</p>
+								<div className="mt-3 flex space-x-2 items-baseline">
+									<Button className="mt-5" type="button" disabled={isLoading} onClick={onSubmit}>
+										{isLoading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:""}
+										Process image
+									</Button>
+									{processedImage && <a className="text-sm underline" href="#results">Go to results</a>}
+								</div>
 							</AlertDescription>
 						</Alert>
-						<Form {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2 items-center">
-								<FormField
-									control={form.control}
-									name="width"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Width</FormLabel>
-											<FormControl>
-												<Input type="number" placeholder="Width" {...field} onChange={event => field.onChange(parseInt(event.target.value))} />
-											</FormControl>
-											<FormDescription>
-											Base image width
-											</FormDescription>
-											<FormMessage />
-										</FormItem>
-										
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="height"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Height</FormLabel>
-											<FormControl>
-												<Input type="number" placeholder="Height" {...field} onChange={event => field.onChange(parseInt(event.target.value))} />
-											</FormControl>
-											<FormDescription>
-											Base image height
-											</FormDescription>
-											<FormMessage />
-										</FormItem>
-										
-									)}
-								/>
-								<Button type="submit" disabled={isLoading}>
-									{isLoading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:""}
-									Process
-								</Button>
-								{processedImage && <Link className="text-white text-sm underline" href="#results">Go to results</Link>}
-							</form>
-						</Form>
 					</>
 					: ""
 				}
